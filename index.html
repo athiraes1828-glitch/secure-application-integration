@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Internship Board</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f9; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+        .loading { color: blue; }
+        .error { color: red; }
+        input, select { width: 100%; padding: 8px; margin: 10px 0; box-sizing: border-box; }
+        button { background: #007bff; color: white; border: none; padding: 10px 15px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Secure Internship Application</h2>
+        <div id="loading" class="loading" style="display:none;">Loading internships...</div>
+        <div id="error" class="error" style="display:none;"></div>
+        
+        <form id="appForm">
+            <label>Internship ID:</label>
+            <input type="text" id="internship_id" required placeholder="e.g., INT-101">
+
+            <label>Full Name:</label>
+            <input type="text" id="applicant_name" required placeholder="Your Name">
+
+            <label>Email Address:</label>
+            <input type="email5" id="applicant_email" required placeholder="name@example.com">
+
+            <button type="submit">Submit Application</button>
+        </form>
+        <p id="responseMsg"></p>
+    </div>
+
+    <script>
+        document.getElementById('appForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const internship_id = document.getElementById('internship_id').value;
+            const applicant_name = document.getElementById('applicant_name').value;
+            const applicant_email = document.getElementById('applicant_email').value;
+
+            const response = await fetch('http://localhost:3000/api/applications', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ internship_id, applicant_name, applicant_email })
+            });
+
+            const result = await response.json();
+            document.getElementById('responseMsg').innerText = result.message || 'Submitted successfully!';
+        });
+    </script>
+</body>
+</html>
